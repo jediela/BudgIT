@@ -15,7 +15,10 @@ export async function POST({ request }) {
 		const { name, description, amount, card, userId, type } = await request.json();
 
 		if (!name || !description || !userId || !amount || !type) {
-			return json({ status: 'error', message: 'Please enter the required fields' }, { status: 400 });
+			return json(
+				{ status: 'error', message: 'Please enter the required fields' },
+				{ status: 400 }
+			);
 		}
 
 		const newExpense = await prisma.expense.create({
