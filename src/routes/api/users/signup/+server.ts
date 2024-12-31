@@ -1,5 +1,6 @@
 import { json } from '@sveltejs/kit';
 import { prisma } from '$lib/prisma.js';
+import { hashPassword } from '$lib/auth/hash.js';
 
 export async function POST({ request }) {
 	try {
@@ -21,19 +22,20 @@ export async function POST({ request }) {
 		}
 
 		// Hash password
+		const hashedPassword = await hashPassword(password);
 
 		// Create user
 		const newUser = await prisma.user.create({
-			data: { email, fname, lname, password },
-            select: {
-                id: true,
-                email: true,
-                fname: true,
-                lname: true
-            }
+			data: { email, fname, lname, password: hashedPassword },
+			select: {
+				id: true,
+				email: true,
+				fname: true,
+				lname: true
+			}
 		});
 
-		// Return new user without password
+		// Return new user without exposing password
 		return json({ status: 'success', user: newUser }, { status: 201 });
 	} catch (error: any) {
 		return json({ status: 'error', message: error.message }, { status: 500 });
