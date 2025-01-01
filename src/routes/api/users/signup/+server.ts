@@ -1,8 +1,8 @@
-import { json } from '@sveltejs/kit';
+import { json, type RequestEvent } from '@sveltejs/kit';
 import { prisma } from '$lib/prisma.js';
 import { hashPassword } from '$lib/auth/hash.js';
 
-export async function POST({ request }) {
+export async function POST({ request }: RequestEvent) {
 	try {
 		// Extract user info from request body
 		const { email, fname, lname, password } = await request.json();
