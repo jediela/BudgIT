@@ -1,6 +1,7 @@
 import { json, type RequestEvent } from '@sveltejs/kit';
 import { prisma } from '$lib/prisma';
 import { authenticate } from '$lib/auth/jwt.js';
+import { validateFields } from '$lib/api/utils';
 
 export function GET() {
 	const responseBody = {
@@ -14,19 +15,14 @@ export function GET() {
 export async function POST({ request }: RequestEvent) {
 	const user = await authenticate(request);
 
+	// user will return a response if error occurs]
 	if (user instanceof Response) {
 		return user;
 	}
 
 	try {
 		const { name, description, amount, card, type } = await request.json();
-
-		if (!name || !amount || !type) {
-			return json(
-				{ status: 'error', message: 'Please enter the required fields' },
-				{ status: 400 }
-			);
-		}
+		validateFields({ name, amount, type });
 
 		const newExpense = await prisma.expense.create({
 			data: { name, description, amount, card, userId: user.id, type }
