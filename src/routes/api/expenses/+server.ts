@@ -1,5 +1,6 @@
-import { json } from '@sveltejs/kit';
+import { json, type RequestEvent } from '@sveltejs/kit';
 import { prisma } from '$lib/prisma';
+import { authenticate } from '$lib/auth/jwt.js';
 
 export function GET() {
 	const responseBody = {
@@ -10,11 +11,17 @@ export function GET() {
 	return json(responseBody);
 }
 
-export async function POST({ request }) {
-	try {
-		const { name, description, amount, card, userId, type } = await request.json();
+export async function POST({ request }: RequestEvent) {
+	const user = await authenticate(request);
 
-		if (!name || !description || !userId || !amount || !type) {
+	if (user instanceof Response) {
+		return user;
+	}
+
+	try {
+		const { name, description, amount, card, type } = await request.json();
+
+		if (!name || !amount || !type) {
 			return json(
 				{ status: 'error', message: 'Please enter the required fields' },
 				{ status: 400 }
@@ -22,7 +29,7 @@ export async function POST({ request }) {
 		}
 
 		const newExpense = await prisma.expense.create({
-			data: { name, description, amount, card, userId, type }
+			data: { name, description, amount, card, userId: user.id, type }
 		});
 
 		return json(newExpense, { status: 201 });
