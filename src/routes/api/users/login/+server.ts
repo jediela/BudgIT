@@ -1,9 +1,9 @@
 import { comparePassword } from '$lib/auth/hash';
 import { generateAccessToken, generateRefreshToken } from '$lib/auth/jwt';
 import { prisma } from '$lib/prisma.js';
-import { json } from '@sveltejs/kit';
+import { json, type RequestEvent } from '@sveltejs/kit';
 
-export async function POST({ request }) {
+export async function POST({ request }: RequestEvent) {
 	const { email, password } = await request.json();
 
 	if (!email || !password) {
