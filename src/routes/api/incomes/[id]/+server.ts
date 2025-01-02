@@ -1,5 +1,5 @@
 import { authenticate } from '$lib/auth/jwt';
-import { findExpenseById } from '$lib/expenses/utils';
+import { findIncomeById } from '$lib/incomes/utils';
 import { validateFields, validateId, checkAuthorization } from '$lib/api/utils';
 import { prisma } from '$lib/prisma';
 import { json, type RequestEvent } from '@sveltejs/kit';
@@ -15,19 +15,19 @@ export async function PUT({ request, params }: RequestEvent) {
 	validateId(id);
 
 	try {
-		const { name, description, month, amount, card, type } = await request.json();
+		const { name, description, amount, month, account, type } = await request.json();
 		validateFields({ name, amount, type, month });
 
-		const expense = await findExpenseById(Number(id));
-		checkAuthorization(expense, user);
+		const income = await findIncomeById(Number(id));
+		checkAuthorization(income, user);
 
-		const updatedExpense = await prisma.expense.update({
+		const updatedIncome = await prisma.income.update({
 			where: { id: Number(id) },
-			data: { name, description, month, amount, card, userId: user.id, type }
+			data: { name, description, month, amount, account, userId: user.id, type }
 		});
 
 		return json(
-			{ status: 'success', message: 'Expense updated successfully', updatedExpense },
+			{ status: 'success', message: 'Income updated successfully', updatedIncome },
 			{ status: 200 }
 		);
 	} catch (error: any) {
@@ -58,10 +58,10 @@ export async function DELETE({ request, params }: RequestEvent) {
 	validateId(id);
 
 	try {
-		const expense = await findExpenseById(Number(id));
-		checkAuthorization(expense, user);
-		await prisma.expense.delete({ where: { id: Number(id) } });
-		return json({ status: 'success', message: 'Expense deleted successfully' }, { status: 200 });
+		const income = await findIncomeById(Number(id));
+		checkAuthorization(income, user);
+		await prisma.income.delete({ where: { id: Number(id) } });
+		return json({ status: 'success', message: 'Income deleted successfully' }, { status: 200 });
 	} catch (error: any) {
 		if (error instanceof Response) {
 			return error;
@@ -89,9 +89,9 @@ export async function GET({ request, params }: RequestEvent) {
 	validateId(id);
 
 	try {
-		const expense = await findExpenseById(Number(id));
-		checkAuthorization(expense, user);
-		return json({ status: 'success', message: 'Expense found', expense }, { status: 200 });
+		const income = await findIncomeById(Number(id));
+		checkAuthorization(income, user);
+		return json({ status: 'success', message: 'Income found', income }, { status: 200 });
 	} catch (error: any) {
 		if (error instanceof Response) {
 			return error;
