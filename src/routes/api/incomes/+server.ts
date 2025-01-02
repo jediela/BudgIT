@@ -19,7 +19,7 @@ export async function POST({ request }: RequestEvent) {
 	}
 
 	try {
-		const { name, description, amount, account, type } = await request.json();
+		const { name, description, amount, month, account, type } = await request.json();
 
 		if (!name || !amount || !type) {
 			return json(
@@ -29,7 +29,7 @@ export async function POST({ request }: RequestEvent) {
 		}
 
 		const newIncome = await prisma.income.create({
-			data: { name, description, amount, account, userId: user.id, type }
+			data: { name, description, month, amount, account, userId: user.id, type }
 		});
 
 		return json(newIncome, { status: 201 });

@@ -15,15 +15,15 @@ export async function PUT({ request, params }: RequestEvent) {
 	validateId(id);
 
 	try {
-		const { name, description, amount, card, type } = await request.json();
-		validateFields({ name, amount, type });
+		const { name, description, month, amount, card, type } = await request.json();
+		validateFields({ name, amount, type, month });
 
 		const expense = await findExpenseById(Number(id));
 		checkAuthorization(expense, user);
 
 		const updatedExpense = await prisma.expense.update({
 			where: { id: Number(id) },
-			data: { name, description, amount, card, userId: user.id, type }
+			data: { name, description, month, amount, card, userId: user.id, type }
 		});
 
 		return json(
