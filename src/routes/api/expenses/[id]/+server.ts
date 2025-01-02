@@ -1,6 +1,6 @@
 import { authenticate } from '$lib/auth/jwt';
-import { checkAuthorization, findExpenseById } from '$lib/expenses/utils';
-import { validateFields, validateId } from '$lib/api/utils';
+import { findExpenseById } from '$lib/expenses/utils';
+import { validateFields, validateId, checkAuthorization } from '$lib/api/utils';
 import { prisma } from '$lib/prisma';
 import { json, type RequestEvent } from '@sveltejs/kit';
 
