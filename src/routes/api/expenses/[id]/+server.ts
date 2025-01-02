@@ -31,7 +31,16 @@ export async function PUT({ request, params }: RequestEvent) {
 			{ status: 200 }
 		);
 	} catch (error: any) {
-		return json({ status: 'error', message: error.message }, { status: 500 });
+		if (error instanceof Response) {
+			return error;
+		}
+		if (error.message === 'Income not found') {
+			return json({ status: 'error', message: 'Income not found' }, { status: 404 });
+		}
+		return json(
+			{ status: 'error', message: error.message || 'An unknown error occurred' },
+			{ status: 500 }
+		);
 	}
 }
 
@@ -52,7 +61,16 @@ export async function DELETE({ request, params }: RequestEvent) {
 		await prisma.expense.delete({ where: { id: Number(id) } });
 		return json({ status: 'success', message: 'Expense deleted successfully' }, { status: 200 });
 	} catch (error: any) {
-		return json({ status: 'error', message: error.message }, { status: 500 });
+		if (error instanceof Response) {
+			return error;
+		}
+		if (error.message === 'Income not found') {
+			return json({ status: 'error', message: 'Income not found' }, { status: 404 });
+		}
+		return json(
+			{ status: 'error', message: error.message || 'An unknown error occurred' },
+			{ status: 500 }
+		);
 	}
 }
 
@@ -71,6 +89,15 @@ export async function GET({ request, params }: RequestEvent) {
 		checkAuthorization(expense, user);
 		return json({ status: 'success', message: 'Expense found', expense }, { status: 200 });
 	} catch (error: any) {
-		return json({ status: 'error', message: error.message }, { status: 500 });
+		if (error instanceof Response) {
+			return error;
+		}
+		if (error.message === 'Income not found') {
+			return json({ status: 'error', message: 'Income not found' }, { status: 404 });
+		}
+		return json(
+			{ status: 'error', message: error.message || 'An unknown error occurred' },
+			{ status: 500 }
+		);
 	}
 }
