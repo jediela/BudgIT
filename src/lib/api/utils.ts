@@ -14,12 +14,17 @@ export function validateId(id: string | undefined) {
  * Validates required fields in a request payload.
  */
 export function validateFields(fields: Record<string, any>) {
+	const missingKeys: string[] = [];
 	for (const [key, value] of Object.entries(fields)) {
-		console.log(value);
-		if (!value) {
-			console.log("missing field");
-			throw json({ status: 'error', message: 'Please enter the required fields', missingKey: key }, { status: 400 });
+		if (value === null || value === undefined || value === '') {
+			missingKeys.push(key);
 		}
+	}
+	if (missingKeys.length > 0) {
+		throw json(
+			{ status: 'error', message: 'Please enter the required fields', missingKeys: missingKeys },
+			{ status: 400 }
+		);
 	}
 }
 

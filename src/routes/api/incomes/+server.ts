@@ -21,7 +21,7 @@ export async function POST({ request }: RequestEvent) {
 
 	try {
 		const { name, description, month, amount, account, type } = await request.json();
-		validateFields({name, amount, type, month});
+		validateFields({ name, amount, type, month });
 		const newIncome = await prisma.income.create({
 			data: { name, description, month, amount, account, userId: user.id, type }
 		});
