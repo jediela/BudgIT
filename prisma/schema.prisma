@@ -24,10 +24,10 @@ model User {
 }
 
 model Income {
-  id          Int      @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   name        String
   description String?
-  date        DateTime @default(now())
+  month       Month
   amount      Decimal
   account     String?
 
@@ -36,15 +36,11 @@ model Income {
   type   IncomeTypes
 }
 
-enum IncomeTypes {
-  PAYCHECK
-}
-
 model Expense {
-  id          Int      @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   name        String
   description String?
-  date        DateTime @default(now())
+  month       Month
   amount      Decimal
   card        String?
 
@@ -53,6 +49,37 @@ model Expense {
   type   ExpenseTypes
 }
 
+enum IncomeTypes {
+  Paycheck
+  Interest
+  Bonus
+  Investment
+  Other
+}
+
 enum ExpenseTypes {
-  FOOD
+  Food
+  Clothing
+  Electronics
+  Rent
+  Utilities
+  Transportation
+  Entertainment
+  Healthcare
+  Other
+}
+
+enum Month {
+  January
+  February
+  March
+  April
+  May
+  June
+  July
+  August
+  September
+  October
+  November
+  December
 }

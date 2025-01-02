@@ -21,11 +21,11 @@ export async function POST({ request }: RequestEvent) {
 	}
 
 	try {
-		const { name, description, amount, card, type } = await request.json();
-		validateFields({ name, amount, type });
+		const { name, description, month, amount, card, type } = await request.json();
+		validateFields({ name, amount, type, month });
 
 		const newExpense = await prisma.expense.create({
-			data: { name, description, amount, card, userId: user.id, type }
+			data: { name, description, month, amount, card, userId: user.id, type }
 		});
 
 		return json(newExpense, { status: 201 });
