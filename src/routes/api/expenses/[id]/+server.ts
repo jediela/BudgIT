@@ -58,7 +58,7 @@ export async function DELETE({ request, params }: RequestEvent) {
 
 // View
 export async function GET({ request, params }: RequestEvent) {
-    const user = await authenticate(request);
+	const user = await authenticate(request);
 
 	if (user instanceof Response) {
 		return user;
@@ -66,14 +66,11 @@ export async function GET({ request, params }: RequestEvent) {
 	const { id } = params;
 	validateId(id);
 
-    try {
-        const expense = await findExpenseById(Number(id));
-        checkAuthorization(expense, user);
-        return json(
-			{ status: 'success', message: 'Expense found', expense },
-			{ status: 200 }
-		);
-    } catch (error:any) {
-        return json({ status: 'error', message: error.message }, { status: 500 });
-    }
+	try {
+		const expense = await findExpenseById(Number(id));
+		checkAuthorization(expense, user);
+		return json({ status: 'success', message: 'Expense found', expense }, { status: 200 });
+	} catch (error: any) {
+		return json({ status: 'error', message: error.message }, { status: 500 });
+	}
 }
