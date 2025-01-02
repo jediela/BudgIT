@@ -14,9 +14,11 @@ export function validateId(id: string | undefined) {
  * Validates required fields in a request payload.
  */
 export function validateFields(fields: Record<string, any>) {
-	for (const [value] of Object.entries(fields)) {
+	for (const [key, value] of Object.entries(fields)) {
+		console.log(value);
 		if (!value) {
-			throw json({ status: 'error', message: 'Please enter the required fields' }, { status: 400 });
+			console.log("missing field");
+			throw json({ status: 'error', message: 'Please enter the required fields', missingKey: key }, { status: 400 });
 		}
 	}
 }

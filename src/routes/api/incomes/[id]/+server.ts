@@ -1,6 +1,6 @@
 import { authenticate } from '$lib/auth/jwt';
 import { findIncomeById } from '$lib/incomes/utils';
-import { validateFields, validateId, checkAuthorization } from '$lib/api/utils';
+import { validateId, checkAuthorization } from '$lib/api/utils';
 import { prisma } from '$lib/prisma';
 import { json, type RequestEvent } from '@sveltejs/kit';
 
@@ -16,8 +16,6 @@ export async function PUT({ request, params }: RequestEvent) {
 
 	try {
 		const { name, description, amount, month, account, type } = await request.json();
-		validateFields({ name, amount, type, month });
-
 		const income = await findIncomeById(Number(id));
 		checkAuthorization(income, user);
 
@@ -34,11 +32,6 @@ export async function PUT({ request, params }: RequestEvent) {
 		if (error instanceof Response) {
 			return error;
 		}
-
-		if (error.message === 'Income not found') {
-			return json({ status: 'error', message: 'Income not found' }, { status: 404 });
-		}
-
 		return json(
 			{ status: 'error', message: error.message || 'An unknown error occurred' },
 			{ status: 500 }
@@ -66,11 +59,6 @@ export async function DELETE({ request, params }: RequestEvent) {
 		if (error instanceof Response) {
 			return error;
 		}
-
-		if (error.message === 'Income not found') {
-			return json({ status: 'error', message: 'Income not found' }, { status: 404 });
-		}
-
 		return json(
 			{ status: 'error', message: error.message || 'An unknown error occurred' },
 			{ status: 500 }

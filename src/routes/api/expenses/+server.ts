@@ -54,13 +54,15 @@ export async function POST({ request }: RequestEvent) {
 	try {
 		const { name, description, month, amount, card, type } = await request.json();
 		validateFields({ name, amount, type, month });
-
 		const newExpense = await prisma.expense.create({
 			data: { name, description, month, amount, card, userId: user.id, type }
 		});
 
 		return json(newExpense, { status: 201 });
 	} catch (error: any) {
+		if (error instanceof Response) {
+			return error;
+		}
 		return json({ status: 'error', message: error.message }, { status: 500 });
 	}
 }
