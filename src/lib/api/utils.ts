@@ -1,4 +1,5 @@
 import { json } from '@sveltejs/kit';
+import type { User } from '@prisma/client';
 
 /**
  * Validates if the given ID is a valid number.
@@ -17,5 +18,17 @@ export function validateFields(fields: Record<string, any>) {
 		if (!value) {
 			throw json({ status: 'error', message: 'Please enter the required fields' }, { status: 400 });
 		}
+	}
+}
+
+/**
+ * Checks if the user is authorized to access/modify the given income/expense.
+ */
+export function checkAuthorization(item: { userId: number }, user: User) {
+	if (item.userId !== user.id) {
+		throw json(
+			{ status: 'error', message: 'Unauthorized, you do not have access to this expense' },
+			{ status: 403 }
+		);
 	}
 }
