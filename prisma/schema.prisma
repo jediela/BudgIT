@@ -19,8 +19,8 @@ model User {
   fname    String
   lname    String
   password String
-  Income   Income[]
-  Expense  Expense[]
+  Income   Income[] @relation("UserIncome")
+  Expense  Expense[] @relation("UserExpense")
 }
 
 model Income {
@@ -31,7 +31,7 @@ model Income {
   amount      Decimal
   account     String?
 
-  User   User        @relation(fields: [userId], references: [id])
+  User   User        @relation("UserIncome", fields: [userId], references: [id], onDelete: Cascade)
   userId Int
   type   IncomeTypes
 }
@@ -44,7 +44,7 @@ model Expense {
   amount      Decimal
   card        String?
 
-  User   User         @relation(fields: [userId], references: [id])
+  User   User          @relation("UserExpense", fields: [userId], references: [id], onDelete: Cascade)
   userId Int
   type   ExpenseTypes
 }
