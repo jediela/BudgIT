@@ -48,6 +48,7 @@
 		"@tailwindcss/typography": "^0.5.15",
 		"bcrypt": "^5.1.1",
 		"jsonwebtoken": "^9.0.2",
+		"mode-watcher": "^0.5.0",
 		"prisma": "^6.1.0"
 	}
 }
