@@ -1,8 +1,8 @@
 export async function load({ fetch }) {
 	try {
 		const [expensesResponse, incomesResponse] = await Promise.all([
-			fetch('/api/expenses', { credentials: 'include' }),
-			fetch('/api/incomes', { credentials: 'include' })
+			fetch('/api/expenses/all', { credentials: 'include' }),
+			fetch('/api/incomes/all', { credentials: 'include' })
 		]);
 
 		if (!expensesResponse.ok || !incomesResponse.ok) {
