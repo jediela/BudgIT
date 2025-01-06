@@ -15,12 +15,19 @@ export async function generateRefreshToken(userId: number) {
 }
 
 export async function authenticate(request: Request) {
-	const authHeader = request.headers.get('Authorization');
-	if (!authHeader) {
-		return json({ status: 'error', message: 'Authorization header missing' }, { status: 401 });
+	const cookieHeader = request.headers.get('Cookie');
+	if (!cookieHeader) {
+		return json({ status: 'error', message: 'Cookie header missing' }, { status: 401 });
 	}
 
-	const token = authHeader.split(' ')[1];
+	const cookies = Object.fromEntries(
+		cookieHeader.split('; ').map((cookie) => cookie.split('=').map(decodeURIComponent))
+	);
+	const token = cookies['refreshToken'];
+
+	if (!token) {
+		return json({ status: 'error', message: 'Access token missing in cookies' }, { status: 401 });
+	}
 
 	try {
 		const decoded = jwt.verify(token, JWT_SECRET) as { userId: number };

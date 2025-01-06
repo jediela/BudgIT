@@ -3,7 +3,7 @@ import { generateAccessToken, generateRefreshToken } from '$lib/auth/jwt';
 import { prisma } from '$lib/prisma.js';
 import { json, type RequestEvent } from '@sveltejs/kit';
 
-export async function POST({ request }: RequestEvent) {
+export async function POST({ request, cookies }: RequestEvent) {
 	const { email, password } = await request.json();
 
 	if (!email || !password) {
@@ -22,13 +22,28 @@ export async function POST({ request }: RequestEvent) {
 
 		const accessToken = await generateAccessToken(user.id);
 		const refreshToken = await generateRefreshToken(user.id);
+
+		cookies.set('accessToken', accessToken, {
+			httpOnly: true,
+			secure: true,
+			sameSite: 'strict',
+			path: '/',
+			maxAge: 60 * 15
+		});
+
+		cookies.set('refreshToken', refreshToken, {
+			httpOnly: true,
+			secure: true,
+			sameSite: 'strict',
+			path: '/',
+			maxAge: 60 * 60 * 24 * 7
+		});
+
 		return json(
 			{
 				status: 'success',
 				message: 'Login successful',
-				user: { id: user.id, email: user.email, fname: user.fname },
-				accessToken,
-				refreshToken
+				user: { id: user.id, email: user.email, fname: user.fname }
 			},
 			{ status: 200 }
 		);
