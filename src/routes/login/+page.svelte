@@ -1,5 +1,9 @@
-<!-- <script lang="ts">
+<script lang="ts">
 	import { goto } from '$app/navigation';
+	import { Button } from '$lib/components/ui/button/index.js';
+	import * as Card from '$lib/components/ui/card/index.js';
+	import { Input } from '$lib/components/ui/input/index.js';
+	import { Label } from '$lib/components/ui/label/index.js';
 
 	let email = $state('');
 	let password = $state('');
@@ -29,41 +33,27 @@
 	}
 </script>
 
-<div>login</div>
-<form onsubmit={handleLogin}>
-	<input placeholder="email" bind:value={email} type="text" />
-	<input placeholder="password" bind:value={password} type="text" />
-	<button type="submit">submit</button>
-</form> -->
-<script lang="ts">
-	import { Button } from '$lib/components/ui/button/index.js';
-	import * as Card from '$lib/components/ui/card/index.js';
-	import { Input } from '$lib/components/ui/input/index.js';
-	import { Label } from '$lib/components/ui/label/index.js';
-
-	
-</script>
-
 <Card.Root class="w-[350px]">
 	<Card.Header>
-		<Card.Title>Create project</Card.Title>
-		<Card.Description>Deploy your new project in one-click.</Card.Description>
+		<Card.Title>Login to BudgIT</Card.Title>
+		<Card.Description>Enter your email below to login to your account</Card.Description>
 	</Card.Header>
 	<Card.Content>
 		<form>
 			<div class="grid w-full items-center gap-4">
 				<div class="flex flex-col space-y-1.5">
-					<Label for="name">Name</Label>
-					<Input id="name" placeholder="Name of your project" />
+					<Label for="email">Email</Label>
+					<Input id="email" bind:value={email} />
 				</div>
 				<div class="flex flex-col space-y-1.5">
-					<Label for="framework">Framework</Label>
+					<Label for="password">Password</Label>
+					<Input id="password" type="password" bind:value={password} />
 				</div>
 			</div>
 		</form>
 	</Card.Content>
 	<Card.Footer class="flex justify-between">
-		<Button variant="outline">Cancel</Button>
-		<Button>Deploy</Button>
+		<Button on:click={handleLogin}>Log in</Button>
+		<Card.Description>Don't have an account? <a href="/signup">Sign up</a></Card.Description>
 	</Card.Footer>
 </Card.Root>
