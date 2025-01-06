@@ -63,14 +63,14 @@ export async function GET({ request }: RequestEvent) {
 				{
 					status: 'success',
 					message: 'No income matches the criteria',
-					income: [],
+					incomes: [],
 					meta: { total: totalIncome, page, limit, totalPages }
 				},
 				{ status: 200 }
 			);
 		}
 
-		const income = await prisma.income.findMany({
+		const incomes = await prisma.income.findMany({
 			where: filters,
 			orderBy: sortBy ? { [sortBy]: order } : undefined,
 			skip: (pageNumber - 1) * limitNumber,
@@ -81,7 +81,7 @@ export async function GET({ request }: RequestEvent) {
 			{
 				status: 'success',
 				message: 'Income found',
-				income,
+				incomes,
 				meta: {
 					total: totalIncome,
 					page: pageNumber,
