@@ -1,6 +1,5 @@
 <script lang="ts">
-	import type { PageData } from './login/$types';
-	let { data }: { data: PageData } = $props();
+	import { goto } from '$app/navigation';
 
 	let email = $state('');
 	let password = $state('');
@@ -19,14 +18,14 @@
 
 			const data = await res.json();
 
+			goto('/dashboard');
+
 			if (data.status === 'error') {
 				throw new Error(data.message);
 			}
-
-            localStorage.setItem('refreshToken', data.refreshToken); 
-            window.location.href = '/dashboard'; // Change this URL as needed
-
-		} catch (error) {}
+		} catch (error: any) {
+			throw new Error(error.message);
+		}
 	}
 </script>
 
