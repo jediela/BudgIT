@@ -1,31 +1,26 @@
 import { authenticate } from '$lib/auth/jwt';
-import { validateId, checkAuthorization } from '$lib/api/utils';
+import { validateFields, validateId } from '$lib/api/utils';
 import { prisma } from '$lib/prisma';
 import { json, type RequestEvent } from '@sveltejs/kit';
+import { hashPassword } from '$lib/auth/hash';
 
 // Update User
-export async function PUT({ request, params }: RequestEvent) {
+export async function PUT({ request }: RequestEvent) {
 	const user = await authenticate(request);
 
 	if (user instanceof Response) {
 		return user;
 	}
 
-	const { id } = params;
-	validateId(id);
-
-	if (user.id !== Number(id)) {
-		return json(
-			{ status: 'error', message: 'You are not authorized to update this user' },
-			{ status: 403 }
-		);
-	}
+	const id = user.id;
 
 	try {
-		const { email, fname, lname } = await request.json();
+		const { email, fname, lname, password } = await request.json();
+		validateFields({ email, fname, lname, password });
+		const hashedPassword = await hashPassword(password);
 		const updatedUser = await prisma.user.update({
 			where: { id: Number(id) },
-			data: { email, fname, lname }
+			data: { email, fname, lname, password: hashedPassword }
 		});
 
 		return json(
@@ -41,22 +36,14 @@ export async function PUT({ request, params }: RequestEvent) {
 }
 
 // Delete User
-export async function DELETE({ request, params }: RequestEvent) {
+export async function DELETE({ request }: RequestEvent) {
 	const user = await authenticate(request);
 
 	if (user instanceof Response) {
 		return user;
 	}
 
-	const { id } = params;
-	validateId(id);
-
-	if (user.id !== Number(id)) {
-		return json(
-			{ status: 'error', message: 'You are not authorized to delete this user' },
-			{ status: 403 }
-		);
-	}
+	const id = user.id;
 
 	try {
 		await prisma.user.delete({ where: { id: Number(id) } });
@@ -70,22 +57,14 @@ export async function DELETE({ request, params }: RequestEvent) {
 }
 
 // View User
-export async function GET({ request, params }: RequestEvent) {
+export async function GET({ request }: RequestEvent) {
 	const user = await authenticate(request);
 
 	if (user instanceof Response) {
 		return user;
 	}
 
-	const { id } = params;
-	validateId(id);
-
-	if (user.id !== Number(id)) {
-		return json(
-			{ status: 'error', message: 'You are not authorized to view this user' },
-			{ status: 403 }
-		);
-	}
+	const id = user.id;
 
 	try {
 		const userDetails = await prisma.user.findUnique({
