@@ -7,6 +7,7 @@
 
 	let email = $state('');
 	let password = $state('');
+	let message = $state('');
 
 	async function handleLogin(event: Event) {
 		event.preventDefault();
@@ -21,6 +22,11 @@
 			});
 
 			const data = await res.json();
+
+			if (!res.ok) {
+				message = data.message;
+				return;
+			}
 
 			goto('/dashboard');
 
@@ -37,6 +43,9 @@
 	<Card.Header>
 		<Card.Title>Login to BudgIT</Card.Title>
 		<Card.Description>Enter your email below to login to your account</Card.Description>
+		{#if message}
+			<Label class="bg-red-500">Email or password is incorrect</Label>
+		{/if}
 	</Card.Header>
 	<Card.Content>
 		<form>
@@ -54,6 +63,8 @@
 	</Card.Content>
 	<Card.Footer class="flex justify-between">
 		<Button on:click={handleLogin}>Log in</Button>
-		<Card.Description>Don't have an account? <a href="/signup">Sign up</a></Card.Description>
+		<Card.Description>Don't have an account? <a href="/auth/signup">Sign up</a></Card.Description>
 	</Card.Footer>
 </Card.Root>
+
+<div>{message}</div>

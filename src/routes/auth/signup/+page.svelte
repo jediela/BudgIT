@@ -64,6 +64,6 @@
 	</Card.Content>
 	<Card.Footer class="flex justify-between">
 		<Button on:click={handleSignup}>Create account</Button>
-		<Card.Description>Already have an account? <a href="/login">Log in here</a></Card.Description>
+		<Card.Description>Already have an account? <a href="/auth/login">Log in here</a></Card.Description>
 	</Card.Footer>
 </Card.Root>
