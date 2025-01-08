@@ -21,6 +21,7 @@ model User {
   password String
   Income   Income[] @relation("UserIncome")
   Expense  Expense[] @relation("UserExpense")
+  Budget   Budget[]  @relation("UserBudget")
 }
 
 model Income {
@@ -47,7 +48,22 @@ model Expense {
   User   User          @relation("UserExpense", fields: [userId], references: [id], onDelete: Cascade)
   userId Int
   type   ExpenseTypes
+
+  Budget   Budget?     @relation(fields: [budgetId], references: [id])
+  budgetId Int?
 }
+
+model Budget {
+  id            Int       @id @default(autoincrement())
+  userId        Int
+  limit         Decimal
+  currentSpending Expense[] @relation
+  type          ExpenseTypes
+  month         Month
+
+  User   User   @relation("UserBudget", fields: [userId], references: [id], onDelete: Cascade)
+}
+
 
 enum IncomeTypes {
   Paycheck
