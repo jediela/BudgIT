@@ -5,5 +5,6 @@
 </script>
 
 <ModeWatcher />
-<div>ROOT LAYOUT</div>
-{@render children()}
+<div class="flex min-h-screen items-center justify-center">
+	{@render children()}
+</div>

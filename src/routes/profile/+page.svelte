@@ -4,14 +4,15 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
-	import Separator from '$lib/components/ui/separator/separator.svelte';
 
-	let email = $state('');
-	let password = $state('');
-	let fname = $state('');
-	let lname = $state('');
+	let { data } = $props();
+	const { user } = data.userData || [];
+	let email = $state(user.email);
+	let password = $state(user.password);
+	let fname = $state(user.fname);
+	let lname = $state(user.lname);
 
-	async function handleSignup(event: Event) {
+	async function handleUpdate(event: Event) {
 		event.preventDefault();
 		try {
 			const res = await fetch('/api/users/signup', {
@@ -37,11 +38,10 @@
 
 <Card.Root class="w-[350px]">
 	<Card.Header>
-		<Card.Title class="text-2xl">Create an account</Card.Title>
-		<Card.Description>Enter your email below to create your account</Card.Description>
+		<Card.Title class="text-2xl">Update your profile</Card.Title>
 	</Card.Header>
 	<Card.Content>
-		<form onsubmit={handleSignup}>
+		<form onsubmit={handleUpdate}>
 			<div class="grid w-full items-center gap-4">
 				<div class="flex flex-col space-y-1.5">
 					<Label for="email">Email</Label>
@@ -61,14 +61,8 @@
 				</div>
 			</div>
 			<div class="flex justify-center pt-4">
-				<Button type="submit">Create account</Button>
+				<Button type="submit">Update</Button>
 			</div>
 		</form>
 	</Card.Content>
-	<Card.Footer class="flex flex-col justify-between space-y-4">
-		<Separator />
-		<Card.Description
-			>Already have an account? <a href="/auth/login">Log in here</a></Card.Description
-		>
-	</Card.Footer>
 </Card.Root>

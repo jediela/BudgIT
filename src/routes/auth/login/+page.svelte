@@ -4,6 +4,7 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
+	import Separator from '$lib/components/ui/separator/separator.svelte';
 
 	let email = $state('');
 	let password = $state('');
@@ -39,16 +40,16 @@
 	}
 </script>
 
-<Card.Root class="w-[350px]">
+<Card.Root class="w-full sm:w-3/4 md:w-1/2 lg:w-1/3">
 	<Card.Header>
-		<Card.Title>Login to BudgIT</Card.Title>
+		<Card.Title class="text-2xl">Login to BudgIT</Card.Title>
 		<Card.Description>Enter your email below to login to your account</Card.Description>
 		{#if message}
 			<Label class="bg-red-500">Email or password is incorrect</Label>
 		{/if}
 	</Card.Header>
 	<Card.Content>
-		<form>
+		<form onsubmit={handleLogin}>
 			<div class="grid w-full items-center gap-4">
 				<div class="flex flex-col space-y-1.5">
 					<Label for="email">Email</Label>
@@ -59,10 +60,13 @@
 					<Input id="password" type="password" bind:value={password} />
 				</div>
 			</div>
+			<div class="flex justify-center pt-4">
+				<Button type="submit">Log in</Button>
+			</div>
 		</form>
 	</Card.Content>
-	<Card.Footer class="flex justify-between">
-		<Button on:click={handleLogin}>Log in</Button>
+	<Card.Footer class="flex flex-col justify-between space-y-4">
+		<Separator />
 		<Card.Description>Don't have an account? <a href="/auth/signup">Sign up</a></Card.Description>
 	</Card.Footer>
 </Card.Root>
