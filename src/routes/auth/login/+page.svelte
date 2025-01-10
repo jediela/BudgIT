@@ -5,15 +5,23 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
+	import { toast } from 'svelte-sonner';
 
 	let email = $state('');
 	let password = $state('');
-	let message = $state('');
 
 	async function handleLogin(event: Event) {
 		event.preventDefault();
 
 		try {
+			if (email === '' || password === '') {
+				toast.error('Please fill in the required fields', {
+					duration: 2000,
+					position: 'top-center'
+				});
+				return;
+			}
+
 			const res = await fetch('/api/users/login', {
 				method: 'POST',
 				headers: {
@@ -25,28 +33,23 @@
 			const data = await res.json();
 
 			if (!res.ok) {
-				message = data.message;
+				email = '';
+				password = '';
+				toast.error('Invalid Credentials', { duration: 2000, position: 'top-center' });
 				return;
 			}
 
 			goto('/dashboard');
-
-			if (data.status === 'error') {
-				throw new Error(data.message);
-			}
 		} catch (error: any) {
 			throw new Error(error.message);
 		}
 	}
 </script>
 
-<Card.Root class="w-full sm:w-3/4 md:w-1/2 lg:w-1/3">
+<Card.Root class="lg:w-1/3">
 	<Card.Header>
 		<Card.Title class="text-2xl">Login to BudgIT</Card.Title>
 		<Card.Description>Enter your email below to login to your account</Card.Description>
-		{#if message}
-			<Label class="bg-red-500">Email or password is incorrect</Label>
-		{/if}
 	</Card.Header>
 	<Card.Content>
 		<form onsubmit={handleLogin}>
@@ -67,8 +70,8 @@
 	</Card.Content>
 	<Card.Footer class="flex flex-col justify-between space-y-4">
 		<Separator />
-		<Card.Description>Don't have an account? <a href="/auth/signup">Sign up</a></Card.Description>
+		<Card.Description
+			>Don't have an account? <a href="/auth/signup" class="underline">Sign up</a></Card.Description
+		>
 	</Card.Footer>
 </Card.Root>
-
-<div>{message}</div>
