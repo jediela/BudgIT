@@ -23,8 +23,10 @@
 	<h1>Budgets:</h1>
 	{#each budgets as budget}
 		<li>
-			<strong>Type:</strong> {budget.type} - 
-			<strong>Month:</strong> {budget.month} - 
+			<strong>Type:</strong>
+			{budget.type} -
+			<strong>Month:</strong>
+			{budget.month} -
 			<strong>Limit:</strong> ${budget.limit}
 		</li>
 	{/each}
