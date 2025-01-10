@@ -2,8 +2,14 @@ export async function load({ fetch }) {
 	try {
 		const res = await fetch('/api/users/me', { credentials: 'include' });
 
+		if (!res.ok) {
+			throw new Error('Failed to fetch user data');
+		}
+
 		const userData = await res.json();
-		console.log(userData);
 		return { userData };
-	} catch (error) {}
+	} catch (error) {
+		console.error('Error fetching data:', error);
+		return { userData: {} };
+	}
 }

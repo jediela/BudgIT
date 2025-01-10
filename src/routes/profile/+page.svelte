@@ -6,7 +6,7 @@
 	import { Label } from '$lib/components/ui/label/index.js';
 
 	let { data } = $props();
-	const { user } = data.userData || [];
+	const { user } = data.userData;
 	let email = $state(user.email);
 	let password = $state(user.password);
 	let fname = $state(user.fname);

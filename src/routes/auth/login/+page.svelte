@@ -30,8 +30,6 @@
 				body: JSON.stringify({ email, password })
 			});
 
-			const data = await res.json();
-
 			if (!res.ok) {
 				email = '';
 				password = '';
@@ -41,7 +39,7 @@
 
 			goto('/dashboard');
 		} catch (error: any) {
-			throw new Error(error.message);
+			toast.error(error.message);
 		}
 	}
 </script>
