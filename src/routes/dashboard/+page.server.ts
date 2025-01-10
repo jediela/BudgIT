@@ -1,21 +1,26 @@
-export async function load({ fetch }) {
+import type { LoadEvent } from '@sveltejs/kit';
+
+export async function load({ fetch }: LoadEvent) {
 	try {
-		const [expensesResponse, incomesResponse] = await Promise.all([
+		const [expensesResponse, incomesResponse, budgetsResponse] = await Promise.all([
 			fetch('/api/expenses/all', { credentials: 'include' }),
-			fetch('/api/incomes/all', { credentials: 'include' })
+			fetch('/api/incomes/all', { credentials: 'include' }),
+			fetch('/api/budget/all', { credentials: 'include' })
 		]);
 
-		if (!expensesResponse.ok || !incomesResponse.ok) {
+		if (!expensesResponse.ok || !incomesResponse.ok || !budgetsResponse.ok) {
 			throw new Error('Failed to fetch one or more resources');
 		}
 
 		const expenses = await expensesResponse.json();
 		const incomes = await incomesResponse.json();
+		const budgets = await budgetsResponse.json();
 
 		return {
 			props: {
 				expenses: expenses.expenses,
-				incomes: incomes.incomes
+				incomes: incomes.incomes,
+				budgets: budgets.budgets
 			}
 		};
 	} catch (error) {
@@ -23,7 +28,8 @@ export async function load({ fetch }) {
 		return {
 			props: {
 				expenses: [],
-				incomes: []
+				incomes: [],
+				budgets: []
 			}
 		};
 	}
