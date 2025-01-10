@@ -5,19 +5,22 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 
-	let email = $state('');
-	let password = $state('');
+	let { data } = $props();
+	const { user } = data.userData;
+	let email = $state(user.email);
+	let password = $state(user.password);
+	let fname = $state(user.fname);
+	let lname = $state(user.lname);
 
-	async function handleLogin(event: Event) {
+	async function handleUpdate(event: Event) {
 		event.preventDefault();
-
 		try {
-			const res = await fetch('/api/users/login', {
+			const res = await fetch('/api/users/signup', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({ email, password })
+				body: JSON.stringify({ email, fname, lname, password })
 			});
 
 			const data = await res.json();
@@ -35,25 +38,31 @@
 
 <Card.Root class="w-[350px]">
 	<Card.Header>
-		<Card.Title>Login to BudgIT</Card.Title>
-		<Card.Description>Enter your email below to login to your account</Card.Description>
+		<Card.Title class="text-2xl">Update your profile</Card.Title>
 	</Card.Header>
 	<Card.Content>
-		<form>
+		<form onsubmit={handleUpdate}>
 			<div class="grid w-full items-center gap-4">
 				<div class="flex flex-col space-y-1.5">
 					<Label for="email">Email</Label>
-					<Input id="email" bind:value={email} />
+					<Input id="email" bind:value={email} placeholder="you@email.com" />
+				</div>
+				<div class="flex flex-col space-y-1.5">
+					<Label for="first_name">First name</Label>
+					<Input id="first_name" bind:value={fname} placeholder="John" />
+				</div>
+				<div class="flex flex-col space-y-1.5">
+					<Label for="last_name">Last name</Label>
+					<Input id="last_name" bind:value={lname} placeholder="Doe" />
 				</div>
 				<div class="flex flex-col space-y-1.5">
 					<Label for="password">Password</Label>
 					<Input id="password" type="password" bind:value={password} />
 				</div>
 			</div>
+			<div class="flex justify-center pt-4">
+				<Button type="submit">Update</Button>
+			</div>
 		</form>
 	</Card.Content>
-	<Card.Footer class="flex justify-between">
-		<Button on:click={handleLogin}>Log in</Button>
-		<Card.Description>Don't have an account? <a href="/signup">Sign up</a></Card.Description>
-	</Card.Footer>
 </Card.Root>
