@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { writable } from 'svelte/store';
+	import { Button } from '$lib/components/ui/button/index.js';
 
 	let { data } = $props();
 	const { expenses } = data.props || [];
@@ -40,50 +41,67 @@
 	}
 </script>
 
-<div>
-	<h1>Expenses:</h1>
-	{#each expenses as expense}
-		<li>
-			<strong>{expense.name}</strong> - {expense.month} - ${expense.amount}
-		</li>
-	{/each}
+<div class="space-y-6 p-6">
+	<h1 class="text-2xl font-bold">Expenses:</h1>
+	<ul class="list-disc pl-6">
+		{#each expenses as expense}
+			<li>
+				<strong>{expense.name}</strong> - {expense.month} - ${expense.amount}
+			</li>
+		{/each}
+	</ul>
 
-	<h1>Incomes:</h1>
-	{#each incomes as income}
-		<li>
-			<strong>{income.name}</strong> - {income.month} - ${income.amount}
-		</li>
-	{/each}
+	<h1 class="text-2xl font-bold">Incomes:</h1>
+	<ul class="list-disc pl-6">
+		{#each incomes as income}
+			<li>
+				<strong>{income.name}</strong> - {income.month} - ${income.amount}
+			</li>
+		{/each}
+	</ul>
 
-	<h1>Budgets:</h1>
-	{#each budgets as budget}
-		<li>
-			<strong>Type:</strong>
-			{budget.type} -
-			<strong>Month:</strong>
-			{budget.month} -
-			<strong>Limit:</strong> ${budget.limit}
-		</li>
-	{/each}
+	<h1 class="text-2xl font-bold">Budgets:</h1>
+	<ul class="list-disc pl-6">
+		{#each budgets as budget}
+			<li>
+				<strong>Type:</strong>
+				{budget.type} - <strong>Month:</strong>
+				{budget.month} - <strong>Limit:</strong> ${budget.limit}
+			</li>
+		{/each}
+	</ul>
 
-	<button on:click={() => showModal.set(true)}>Add Expense</button>
+	<Button on:click={() => showModal.set(true)}>Add Expense</Button>
 
 	{#if $showModal}
-		<div class="modal">
-			<div class="modal-content">
-				<h2>Add Expense</h2>
-				<form on:submit|preventDefault={addExpense}>
+		<div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+			<div class="w-full max-w-md space-y-4 rounded-lg bg-white p-6">
+				<h2 class="text-xl font-semibold">Add Expense</h2>
+				<form on:submit|preventDefault={addExpense} class="space-y-4">
 					<div>
-						<label>Name:</label>
-						<input type="text" bind:value={expenseForm.name} required />
+						<label class="mb-1 block font-medium">Name:</label>
+						<input
+							type="text"
+							bind:value={expenseForm.name}
+							required
+							class="w-full rounded-md border px-4 py-2"
+						/>
 					</div>
 					<div>
-						<label>Description:</label>
-						<input type="text" bind:value={expenseForm.description} />
+						<label class="mb-1 block font-medium">Description:</label>
+						<input
+							type="text"
+							bind:value={expenseForm.description}
+							class="w-full rounded-md border px-4 py-2"
+						/>
 					</div>
 					<div>
-						<label>Month:</label>
-						<select bind:value={expenseForm.month} required>
+						<label class="mb-1 block font-medium">Month:</label>
+						<select
+							bind:value={expenseForm.month}
+							required
+							class="w-full rounded-md border px-4 py-2"
+						>
 							<option value="January">January</option>
 							<option value="February">February</option>
 							<option value="March">March</option>
@@ -99,71 +117,37 @@
 						</select>
 					</div>
 					<div>
-						<label>Amount:</label>
-						<input type="number" bind:value={expenseForm.amount} required />
+						<label class="mb-1 block font-medium">Amount:</label>
+						<input
+							type="number"
+							bind:value={expenseForm.amount}
+							required
+							class="w-full rounded-md border px-4 py-2"
+						/>
 					</div>
 					<div>
-						<label>Card:</label>
-						<input type="text" bind:value={expenseForm.card} />
+						<label class="mb-1 block font-medium">Card:</label>
+						<input
+							type="text"
+							bind:value={expenseForm.card}
+							class="w-full rounded-md border px-4 py-2"
+						/>
 					</div>
 					<div>
-						<label>Type:</label>
-						<input type="text" bind:value={expenseForm.type} required />
+						<label class="mb-1 block font-medium">Type:</label>
+						<input
+							type="text"
+							bind:value={expenseForm.type}
+							required
+							class="w-full rounded-md border px-4 py-2"
+						/>
 					</div>
-					<div class="modal-actions">
-						<button type="submit">Add</button>
-						<button type="button" on:click={() => showModal.set(false)}>Cancel</button>
+					<div class="flex justify-between">
+						<Button type="submit">Add</Button>
+						<Button type="button" on:click={() => showModal.set(false)}>Cancel</Button>
 					</div>
 				</form>
 			</div>
 		</div>
 	{/if}
 </div>
-
-<style>
-	/* Modal styles */
-	.modal {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background: rgba(0, 0, 0, 0.5);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		z-index: 1000;
-	}
-	.modal-content {
-		background: white;
-		padding: 2rem;
-		border-radius: 8px;
-		width: 90%;
-		max-width: 500px;
-	}
-
-	form div {
-		margin-bottom: 1rem;
-	}
-	label {
-		display: block;
-		font-weight: bold;
-	}
-	input {
-		width: 100%;
-		padding: 0.5rem;
-		border-radius: 4px;
-		border: 1px solid #ccc;
-	}
-	select {
-		width: 100%;
-		padding: 0.5rem;
-		border-radius: 4px;
-		border: 1px solid #ccc;
-	}
-	.modal-actions {
-		margin-top: 1rem;
-		display: flex;
-		justify-content: space-between;
-	}
-</style>
