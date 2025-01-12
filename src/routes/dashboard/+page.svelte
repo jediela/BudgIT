@@ -29,7 +29,17 @@
 		type: ''
 	});
 
-	const expenseTypes = ['Food', 'Transportation', 'Utilities', 'Entertainment', 'Rent', 'Healthcare', 'Clothing', 'Electronics', 'Other'];
+	const expenseTypes = [
+		'Food',
+		'Transportation',
+		'Utilities',
+		'Entertainment',
+		'Rent',
+		'Healthcare',
+		'Clothing',
+		'Electronics',
+		'Other'
+	];
 	const incomeTypes = ['Paycheck', 'Interest', 'Bonus', 'Investment', 'Other'];
 
 	async function addExpense(e: Event) {
@@ -162,7 +172,7 @@
 			onCancel={cancelExpenseModal}
 			submitLabel="Add"
 			cancelLabel="Cancel"
-			types={expenseTypes} 
+			types={expenseTypes}
 		/>
 	{/if}
 
@@ -174,7 +184,7 @@
 			onCancel={cancelIncomeModal}
 			submitLabel="Add"
 			cancelLabel="Cancel"
-			types={incomeTypes} 
+			types={incomeTypes}
 		/>
 	{/if}
 </div>
