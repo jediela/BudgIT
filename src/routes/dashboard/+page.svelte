@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button/index.js';
+	import { ExpenseTypes } from '@prisma/client';
+	import { IncomeTypes } from '@prisma/client';
 	import Modal from '$lib/components/Modal.svelte';
 
 	let { data } = $props();
@@ -29,18 +31,8 @@
 		type: ''
 	});
 
-	const expenseTypes = [
-		'Food',
-		'Transportation',
-		'Utilities',
-		'Entertainment',
-		'Rent',
-		'Healthcare',
-		'Clothing',
-		'Electronics',
-		'Other'
-	];
-	const incomeTypes = ['Paycheck', 'Interest', 'Bonus', 'Investment', 'Other'];
+	const expenseTypes = Object.values(ExpenseTypes);
+	const incomeTypes = Object.values(IncomeTypes);
 
 	async function addExpense(e: Event) {
 		e.preventDefault();

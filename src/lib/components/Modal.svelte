@@ -21,7 +21,7 @@
 					type="text"
 					bind:value={formData.name}
 					required
-					class="w-full rounded-md border px-4 py-2"
+					class="w-full rounded-md border px-3 py-2"
 				/>
 			</div>
 			<div>
@@ -30,7 +30,7 @@
 					id="description"
 					type="text"
 					bind:value={formData.description}
-					class="w-full rounded-md border px-4 py-2"
+					class="w-full rounded-md border px-3 py-2"
 				/>
 			</div>
 			<div>
@@ -39,7 +39,7 @@
 					id="month"
 					bind:value={formData.month}
 					required
-					class="w-full rounded-md border px-4 py-2"
+					class="w-full rounded-md border px-3 py-2"
 				>
 					<option value="January">January</option>
 					<option value="February">February</option>
@@ -66,7 +66,7 @@
 						min="0"
 						bind:value={formData.amount}
 						required
-						class="w-full rounded-md border px-4 py-2 pl-8"
+						class="w-full rounded-md border py-2 pl-8"
 					/>
 				</div>
 			</div>
@@ -76,7 +76,7 @@
 					id="account"
 					type="text"
 					bind:value={formData.account}
-					class="w-full rounded-md border px-4 py-2"
+					class="w-full rounded-md border px-3 py-2"
 				/>
 			</div>
 
@@ -86,7 +86,7 @@
 					id="type"
 					bind:value={formData.type}
 					required
-					class="w-full rounded-md border px-4 py-2"
+					class="w-full rounded-md border px-3 py-2"
 				>
 					{#each types as option}
 						<option value={option}>{option}</option>
