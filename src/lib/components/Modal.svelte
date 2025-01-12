@@ -7,6 +7,7 @@
 	export let onCancel: () => void;
 	export let submitLabel: string = 'Submit';
 	export let cancelLabel: string = 'Cancel';
+	export let types: string[] = [];
 </script>
 
 <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -78,16 +79,21 @@
 					class="w-full rounded-md border px-4 py-2"
 				/>
 			</div>
+
 			<div>
 				<label for="type" class="mb-1 block font-medium">Type:</label>
-				<input
+				<select
 					id="type"
-					type="text"
 					bind:value={formData.type}
 					required
 					class="w-full rounded-md border px-4 py-2"
-				/>
+				>
+					{#each types as option}
+						<option value={option}>{option}</option>
+					{/each}
+				</select>
 			</div>
+
 			<div class="flex justify-between">
 				<Button type="submit">{submitLabel}</Button>
 				<Button type="button" on:click={onCancel}>{cancelLabel}</Button>
