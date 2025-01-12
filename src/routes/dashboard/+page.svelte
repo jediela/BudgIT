@@ -12,7 +12,7 @@
 	let showExpenseModal = $state(false);
 	let showIncomeModal = $state(false);
 
-	let expenseForm = writable({
+	let expenseForm = $state({
 		name: '',
 		description: '',
 		month: '',
@@ -21,7 +21,7 @@
 		type: ''
 	});
 
-	let incomeForm = writable({
+	let incomeForm = $state({
 		name: '',
 		description: '',
 		month: '',
@@ -38,7 +38,7 @@
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify($expenseForm)
+				body: JSON.stringify(expenseForm)
 			});
 
 			if (response.ok) {
@@ -46,14 +46,14 @@
 
 				expenses = [...expenses, newExpense];
 				showExpenseModal = false;
-				expenseForm.set({
+				expenseForm = {
 					name: '',
 					description: '',
 					month: '',
 					amount: '',
 					account: '',
 					type: ''
-				});
+				};
 			} else {
 				console.error('Failed to add expense:', await response.json());
 			}
@@ -70,7 +70,7 @@
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify($incomeForm)
+				body: JSON.stringify(incomeForm)
 			});
 
 			if (response.ok) {
@@ -78,14 +78,14 @@
 
 				incomes = [...incomes, newIncome];
 				showIncomeModal = false;
-				incomeForm.set({
+				incomeForm = {
 					name: '',
 					description: '',
 					month: '',
 					amount: '',
 					account: '',
 					type: ''
-				});
+				};
 			} else {
 				console.error('Failed to add income:', await response.json());
 			}
@@ -96,26 +96,26 @@
 
 	function cancelExpenseModal() {
 		showExpenseModal = false;
-		expenseForm.set({
+		expenseForm = {
 			name: '',
 			description: '',
 			month: '',
 			amount: '',
 			account: '',
 			type: ''
-		});
+		};
 	}
 
 	function cancelIncomeModal() {
 		showIncomeModal = false;
-		incomeForm.set({
+		incomeForm = {
 			name: '',
 			description: '',
 			month: '',
 			amount: '',
 			account: '',
 			type: ''
-		});
+		};
 	}
 </script>
 
@@ -155,7 +155,7 @@
 	{#if showExpenseModal}
 		<Modal
 			title="Add Expense"
-			formData={$expenseForm}
+			formData={expenseForm}
 			onSubmit={addExpense}
 			onCancel={cancelExpenseModal}
 			submitLabel="Add"
@@ -166,7 +166,7 @@
 	{#if showIncomeModal}
 		<Modal
 			title="Add Income"
-			formData={$incomeForm}
+			formData={incomeForm}
 			onSubmit={addIncome}
 			onCancel={cancelIncomeModal}
 			submitLabel="Add"
