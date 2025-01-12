@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { writable } from 'svelte/store';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import Modal from '$lib/components/Modal.svelte';
 
