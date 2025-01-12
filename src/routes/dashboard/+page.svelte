@@ -1,24 +1,36 @@
 <script lang="ts">
-	import { writable } from 'svelte/store';
 	import { Button } from '$lib/components/ui/button/index.js';
+	import Modal from '$lib/components/Modal.svelte';
 
 	let { data } = $props();
-	const { expenses } = data.props || [];
-	const { incomes } = data.props || [];
-	const { budgets } = data.props || [];
 
-	const showModal = writable(false);
+	let { expenses } = $state(data.props || []);
+	let { incomes } = $state(data.props || []);
+	const { budgets } = $state(data.props || []);
 
-	let expenseForm = {
+	let showExpenseModal = $state(false);
+	let showIncomeModal = $state(false);
+
+	let expenseForm = $state({
 		name: '',
 		description: '',
 		month: '',
 		amount: '',
-		card: '',
+		account: '',
 		type: ''
-	};
+	});
 
-	async function addExpense() {
+	let incomeForm = $state({
+		name: '',
+		description: '',
+		month: '',
+		amount: '',
+		account: '',
+		type: ''
+	});
+
+	async function addExpense(e: Event) {
+		e.preventDefault();
 		try {
 			const response = await fetch('/api/expenses', {
 				method: 'POST',
@@ -30,14 +42,79 @@
 
 			if (response.ok) {
 				const newExpense = await response.json();
-				expenses.push(newExpense);
-				showModal.set(false);
+
+				expenses = [...expenses, newExpense];
+				showExpenseModal = false;
+				expenseForm = {
+					name: '',
+					description: '',
+					month: '',
+					amount: '',
+					account: '',
+					type: ''
+				};
 			} else {
 				console.error('Failed to add expense:', await response.json());
 			}
 		} catch (error) {
 			console.error('Error adding expense:', error);
 		}
+	}
+
+	async function addIncome(e: Event) {
+		e.preventDefault();
+		try {
+			const response = await fetch('/api/incomes', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(incomeForm)
+			});
+
+			if (response.ok) {
+				const newIncome = await response.json();
+
+				incomes = [...incomes, newIncome];
+				showIncomeModal = false;
+				incomeForm = {
+					name: '',
+					description: '',
+					month: '',
+					amount: '',
+					account: '',
+					type: ''
+				};
+			} else {
+				console.error('Failed to add income:', await response.json());
+			}
+		} catch (error) {
+			console.error('Error adding income:', error);
+		}
+	}
+
+	function cancelExpenseModal() {
+		showExpenseModal = false;
+		expenseForm = {
+			name: '',
+			description: '',
+			month: '',
+			amount: '',
+			account: '',
+			type: ''
+		};
+	}
+
+	function cancelIncomeModal() {
+		showIncomeModal = false;
+		incomeForm = {
+			name: '',
+			description: '',
+			month: '',
+			amount: '',
+			account: '',
+			type: ''
+		};
 	}
 </script>
 
@@ -71,83 +148,28 @@
 		{/each}
 	</ul>
 
-	<Button on:click={() => showModal.set(true)}>Add Expense</Button>
+	<Button on:click={() => (showExpenseModal = true)}>Add Expense</Button>
+	<Button on:click={() => (showIncomeModal = true)}>Add Income</Button>
 
-	{#if $showModal}
-		<div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-			<div class="w-full max-w-md space-y-4 rounded-lg bg-white p-6">
-				<h2 class="text-xl font-semibold">Add Expense</h2>
-				<form on:submit|preventDefault={addExpense} class="space-y-4">
-					<div>
-						<label class="mb-1 block font-medium">Name:</label>
-						<input
-							type="text"
-							bind:value={expenseForm.name}
-							required
-							class="w-full rounded-md border px-4 py-2"
-						/>
-					</div>
-					<div>
-						<label class="mb-1 block font-medium">Description:</label>
-						<input
-							type="text"
-							bind:value={expenseForm.description}
-							class="w-full rounded-md border px-4 py-2"
-						/>
-					</div>
-					<div>
-						<label class="mb-1 block font-medium">Month:</label>
-						<select
-							bind:value={expenseForm.month}
-							required
-							class="w-full rounded-md border px-4 py-2"
-						>
-							<option value="January">January</option>
-							<option value="February">February</option>
-							<option value="March">March</option>
-							<option value="April">April</option>
-							<option value="May">May</option>
-							<option value="June">June</option>
-							<option value="July">July</option>
-							<option value="August">August</option>
-							<option value="September">September</option>
-							<option value="October">October</option>
-							<option value="November">November</option>
-							<option value="December">December</option>
-						</select>
-					</div>
-					<div>
-						<label class="mb-1 block font-medium">Amount:</label>
-						<input
-							type="number"
-							bind:value={expenseForm.amount}
-							required
-							class="w-full rounded-md border px-4 py-2"
-						/>
-					</div>
-					<div>
-						<label class="mb-1 block font-medium">Card:</label>
-						<input
-							type="text"
-							bind:value={expenseForm.card}
-							class="w-full rounded-md border px-4 py-2"
-						/>
-					</div>
-					<div>
-						<label class="mb-1 block font-medium">Type:</label>
-						<input
-							type="text"
-							bind:value={expenseForm.type}
-							required
-							class="w-full rounded-md border px-4 py-2"
-						/>
-					</div>
-					<div class="flex justify-between">
-						<Button type="submit">Add</Button>
-						<Button type="button" on:click={() => showModal.set(false)}>Cancel</Button>
-					</div>
-				</form>
-			</div>
-		</div>
+	{#if showExpenseModal}
+		<Modal
+			title="Add Expense"
+			formData={expenseForm}
+			onSubmit={addExpense}
+			onCancel={cancelExpenseModal}
+			submitLabel="Add"
+			cancelLabel="Cancel"
+		/>
+	{/if}
+
+	{#if showIncomeModal}
+		<Modal
+			title="Add Income"
+			formData={incomeForm}
+			onSubmit={addIncome}
+			onCancel={cancelIncomeModal}
+			submitLabel="Add"
+			cancelLabel="Cancel"
+		/>
 	{/if}
 </div>
