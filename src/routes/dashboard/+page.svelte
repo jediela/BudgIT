@@ -3,6 +3,7 @@
 	import { ExpenseTypes } from '@prisma/client';
 	import { IncomeTypes } from '@prisma/client';
 	import Modal from '$lib/components/Modal.svelte';
+	import { toast } from 'svelte-sonner';
 
 	let { data } = $props();
 
@@ -12,6 +13,8 @@
 
 	let showExpenseModal = $state(false);
 	let showIncomeModal = $state(false);
+	let submittedExpense = $state(false);
+	let submittedIncome = $state(false);
 
 	let expenseForm = $state({
 		name: '',
@@ -36,6 +39,17 @@
 
 	async function addExpense(e: Event) {
 		e.preventDefault();
+
+		let hasError = false;
+
+		if (!expenseForm.name || !expenseForm.month || !expenseForm.amount) {
+			hasError = true;
+			submittedExpense = true;
+			toast.error('Please fill in the required fields', { duration: 2000, position: 'top-center' });
+		}
+
+		if (hasError) return;
+
 		try {
 			const response = await fetch('/api/expenses', {
 				method: 'POST',
@@ -47,7 +61,6 @@
 
 			if (response.ok) {
 				const newExpense = await response.json();
-
 				expenses = [...expenses, newExpense];
 				showExpenseModal = false;
 				expenseForm = {
@@ -58,6 +71,7 @@
 					account: '',
 					type: ''
 				};
+				submittedExpense = false;
 			} else {
 				console.error('Failed to add expense:', await response.json());
 			}
@@ -68,6 +82,16 @@
 
 	async function addIncome(e: Event) {
 		e.preventDefault();
+		let hasError = false;
+
+		if (!incomeForm.name || !incomeForm.month || !incomeForm.amount) {
+			hasError = true;
+			submittedIncome = true;
+			toast.error('Please fill in the required fields', { duration: 2000, position: 'top-center' });
+		}
+
+		if (hasError) return;
+
 		try {
 			const response = await fetch('/api/incomes', {
 				method: 'POST',
@@ -79,7 +103,6 @@
 
 			if (response.ok) {
 				const newIncome = await response.json();
-
 				incomes = [...incomes, newIncome];
 				showIncomeModal = false;
 				incomeForm = {
@@ -90,6 +113,7 @@
 					account: '',
 					type: ''
 				};
+				submittedIncome = false;
 			} else {
 				console.error('Failed to add income:', await response.json());
 			}
@@ -108,6 +132,7 @@
 			account: '',
 			type: ''
 		};
+		submittedExpense = false;
 	}
 
 	function cancelIncomeModal() {
@@ -120,6 +145,7 @@
 			account: '',
 			type: ''
 		};
+		submittedIncome = false;
 	}
 </script>
 
@@ -165,6 +191,7 @@
 			submitLabel="Add"
 			cancelLabel="Cancel"
 			types={expenseTypes}
+			submitted={submittedExpense}
 		/>
 	{/if}
 
@@ -177,6 +204,7 @@
 			submitLabel="Add"
 			cancelLabel="Cancel"
 			types={incomeTypes}
+			submitted={submittedIncome}
 		/>
 	{/if}
 </div>
