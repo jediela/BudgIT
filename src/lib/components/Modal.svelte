@@ -7,7 +7,7 @@
 	export let onCancel: () => void;
 	export let submitLabel: string = 'Submit';
 	export let cancelLabel: string = 'Cancel';
-	export let types: string[] = []; 
+	export let types: string[] = [];
 </script>
 
 <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">

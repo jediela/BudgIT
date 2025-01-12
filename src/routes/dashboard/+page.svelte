@@ -40,13 +40,7 @@
 		'Electronics',
 		'Other'
 	];
-	const incomeTypes = [
-		'Paycheck', 
-		'Interest', 
-		'Bonus', 
-		'Investment', 
-		'Other'
-	];
+	const incomeTypes = ['Paycheck', 'Interest', 'Bonus', 'Investment', 'Other'];
 
 	async function addExpense(e: Event) {
 		e.preventDefault();
