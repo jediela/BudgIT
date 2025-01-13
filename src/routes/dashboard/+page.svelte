@@ -4,6 +4,7 @@
 	import { IncomeTypes } from '@prisma/client';
 	import Modal from '$lib/components/Modal.svelte';
 	import { toast } from 'svelte-sonner';
+	import BarChart from '$lib/components/graph/BarChart.svelte';
 
 	let { data } = $props();
 
@@ -208,3 +209,5 @@
 		/>
 	{/if}
 </div>
+
+<BarChart />

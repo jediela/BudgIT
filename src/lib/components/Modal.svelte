@@ -14,9 +14,11 @@
 <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
 	<div class="w-full max-w-md space-y-4 rounded-lg bg-secondary p-6">
 		<h2 class="text-xl font-semibold">{title}</h2>
-		<form on:submit={onSubmit} class="space-y-4" novalidate>
+		<form onsubmit={onSubmit} class="space-y-4" novalidate>
 			<div>
-				<label for="name" class="mb-1 block font-medium">Name:</label>
+				<label for="name" class="mb-1 block font-medium">
+					Name <span class="text-red-500">*</span>
+				</label>
 				<input
 					id="name"
 					type="text"
@@ -28,7 +30,7 @@
 				/>
 			</div>
 			<div>
-				<label for="description" class="mb-1 block font-medium">Description:</label>
+				<label for="description" class="mb-1 block font-medium">Description</label>
 				<input
 					id="description"
 					type="text"
@@ -37,7 +39,9 @@
 				/>
 			</div>
 			<div>
-				<label for="month" class="mb-1 block font-medium">Month:</label>
+				<label for="month" class="mb-1 block font-medium">
+					Month <span class="text-red-500">*</span>
+				</label>
 				<select
 					id="month"
 					bind:value={formData.month}
@@ -61,7 +65,9 @@
 				</select>
 			</div>
 			<div>
-				<label for="amount" class="mb-1 block font-medium">Amount:</label>
+				<label for="amount" class="mb-1 block font-medium">
+					Amount <span class="text-red-500">*</span>
+				</label>
 				<div class="relative">
 					<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-300">$</span>
 					<input
@@ -78,7 +84,7 @@
 				</div>
 			</div>
 			<div>
-				<label for="account" class="mb-1 block font-medium">Account/Card:</label>
+				<label for="account" class="mb-1 block font-medium">Account/Card</label>
 				<input
 					id="account"
 					type="text"
@@ -87,7 +93,9 @@
 				/>
 			</div>
 			<div>
-				<label for="type" class="mb-1 block font-medium">Type:</label>
+				<label for="type" class="mb-1 block font-medium">
+					Type <span class="text-red-500">*</span>
+				</label>
 				<select
 					id="type"
 					bind:value={formData.type}
@@ -102,7 +110,7 @@
 				</select>
 			</div>
 			<div class="mt-4 flex justify-between">
-				<Button type="button" on:click={onCancel}>{cancelLabel}</Button>
+				<Button type="button" onclick={onCancel}>{cancelLabel}</Button>
 				<Button type="submit">{submitLabel}</Button>
 			</div>
 		</form>

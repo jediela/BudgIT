@@ -1,3 +1,4 @@
+import { calculateMonthIncome } from '$lib/incomes/utils';
 import type { LoadEvent } from '@sveltejs/kit';
 
 export async function load({ fetch }: LoadEvent) {
@@ -15,6 +16,11 @@ export async function load({ fetch }: LoadEvent) {
 		const expenses = await expensesResponse.json();
 		const incomes = await incomesResponse.json();
 		const budgets = await budgetsResponse.json();
+
+		console.log(incomes.incomes);
+
+		const januaryIncomes = calculateMonthIncome(incomes.incomes, 'June');
+		console.log("JAN INCOMES TOTAL: " + januaryIncomes);
 
 		return {
 			props: {

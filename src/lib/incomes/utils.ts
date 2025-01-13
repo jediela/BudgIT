@@ -11,3 +11,12 @@ export async function findIncomeById(id: number) {
 	}
 	return income;
 }
+
+/**
+ * Calculates the total income for the given month
+ */
+export function calculateMonthIncome(incomes: any[], month: string) {
+    return incomes
+        .filter(income => income.month === month)
+        .reduce((total, income) => total + parseFloat(income.amount), 0);
+}
