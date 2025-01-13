@@ -13,7 +13,7 @@
 			incomes: [],
 			budgets: [],
 			monthIncomes: {},
-			monthExpenses: {},
+			monthExpenses: {}
 		}
 	);
 
