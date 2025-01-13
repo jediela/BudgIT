@@ -45,7 +45,7 @@
 		"vite": "^5.4.11"
 	},
 	"dependencies": {
-		"@prisma/client": "^6.1.0",
+		"@prisma/client": "^6.2.1",
 		"@prisma/studio": "^0.503.0",
 		"@shadcn/ui": "^0.0.4",
 		"@tailwindcss/container-queries": "^0.1.1",
@@ -54,7 +54,7 @@
 		"bcrypt": "^5.1.1",
 		"d3": "^7.9.0",
 		"jsonwebtoken": "^9.0.2",
-		"prisma": "^6.1.0",
+		"prisma": "^6.2.1",
 		"shadcn": "^2.1.8"
 	}
 }

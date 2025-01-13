@@ -26,7 +26,8 @@ export async function load({ fetch }: LoadEvent) {
 			props: {
 				expenses: expenses.expenses,
 				incomes: incomes.incomes,
-				budgets: budgets.budgets
+				budgets: budgets.budgets,
+				januaryIncomes: januaryIncomes
 			}
 		};
 	} catch (error) {

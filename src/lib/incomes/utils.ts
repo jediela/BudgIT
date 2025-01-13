@@ -1,4 +1,4 @@
-import { prisma } from '$lib/prisma';
+import { prisma, Decimal } from '$lib/prisma';
 import { json } from '@sveltejs/kit';
 
 /**
@@ -15,8 +15,10 @@ export async function findIncomeById(id: number) {
 /**
  * Calculates the total income for the given month
  */
-export function calculateMonthIncome(incomes: any[], month: string) {
-    return incomes
+export function calculateMonthIncome(incomes: any[], month: string): number {
+    const total = incomes
         .filter(income => income.month === month)
-        .reduce((total, income) => total + parseFloat(income.amount), 0);
+        .reduce((total, income) => total.add(new Decimal(income.amount)), new Decimal(0));
+
+    return total.toNumber();
 }

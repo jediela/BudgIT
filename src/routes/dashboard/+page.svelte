@@ -5,12 +5,19 @@
 	import Modal from '$lib/components/Modal.svelte';
 	import { toast } from 'svelte-sonner';
 	import BarChart from '$lib/components/graph/BarChart.svelte';
+	import { calculateMonthIncome } from '$lib/incomes/utils.js';
 
 	let { data } = $props();
 
 	let { expenses } = $state(data.props || []);
 	let { incomes } = $state(data.props || []);
-	const { budgets } = $state(data.props || []);
+	let { januaryIncomes} = $state(data.props || []);
+ 	const { budgets } = $state(data.props || []);
+
+	$effect(() => {
+		januaryIncomes = calculateMonthIncome(incomes, 'June');
+	});
+
 
 	let showExpenseModal = $state(false);
 	let showIncomeModal = $state(false);
@@ -149,6 +156,8 @@
 		submittedIncome = false;
 	}
 </script>
+
+<!-- <h1>{januaryIncomes}</h1> -->
 
 <div class="space-y-6 p-6">
 	<h1 class="text-2xl font-bold">Expenses:</h1>
