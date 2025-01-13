@@ -5,19 +5,17 @@
 	import Modal from '$lib/components/Modal.svelte';
 	import { toast } from 'svelte-sonner';
 	import BarChart from '$lib/components/graph/BarChart.svelte';
-	import { calculateMonthIncome } from '$lib/incomes/utils.js';
 
 	let { data } = $props();
-
-	let { expenses } = $state(data.props || []);
-	let { incomes } = $state(data.props || []);
-	let { januaryIncomes} = $state(data.props || []);
- 	const { budgets } = $state(data.props || []);
-
-	$effect(() => {
-		januaryIncomes = calculateMonthIncome(incomes, 'June');
-	});
-
+	let { expenses, incomes, budgets, monthIncomes, monthExpenses } = $state(
+		data.props || {
+			expenses: [],
+			incomes: [],
+			budgets: [],
+			monthIncomes: {},
+			monthExpenses: {},
+		}
+	);
 
 	let showExpenseModal = $state(false);
 	let showIncomeModal = $state(false);
@@ -80,6 +78,8 @@
 					type: ''
 				};
 				submittedExpense = false;
+				monthExpenses[newExpense.month] =
+					(monthExpenses[newExpense.month] || 0) + parseFloat(newExpense.amount);
 			} else {
 				console.error('Failed to add expense:', await response.json());
 			}
@@ -122,6 +122,8 @@
 					type: ''
 				};
 				submittedIncome = false;
+				monthIncomes[newIncome.month] =
+					(monthIncomes[newIncome.month] || 0) + parseFloat(newIncome.amount);
 			} else {
 				console.error('Failed to add income:', await response.json());
 			}
@@ -157,7 +159,23 @@
 	}
 </script>
 
-<!-- <h1>{januaryIncomes}</h1> -->
+<h1>MONTHLY INCOME TOTALS</h1>
+<ul>
+	{#each Object.keys(monthIncomes) as month}
+		<li>
+			{month}: <span class="text-green-500">${monthIncomes[month]}</span>
+		</li>
+	{/each}
+</ul>
+
+<h1>MONTHLY EXPENSE TOTALS</h1>
+<ul>
+	{#each Object.keys(monthExpenses) as month}
+		<li>
+			{month}: <span class="text-red-500">${monthExpenses[month]}</span>
+		</li>
+	{/each}
+</ul>
 
 <div class="space-y-6 p-6">
 	<h1 class="text-2xl font-bold">Expenses:</h1>

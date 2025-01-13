@@ -1,4 +1,4 @@
-import { calculateMonthIncome } from '$lib/incomes/utils';
+import { calculateMonthTotal } from '$lib/utils';
 import type { LoadEvent } from '@sveltejs/kit';
 
 export async function load({ fetch }: LoadEvent) {
@@ -13,21 +13,48 @@ export async function load({ fetch }: LoadEvent) {
 			throw new Error('Failed to fetch one or more resources');
 		}
 
-		const expenses = await expensesResponse.json();
 		const incomes = await incomesResponse.json();
+		const expenses = await expensesResponse.json();
 		const budgets = await budgetsResponse.json();
 
-		console.log(incomes.incomes);
+		const months = [
+			'January',
+			'February',
+			'March',
+			'April',
+			'May',
+			'June',
+			'July',
+			'August',
+			'September',
+			'October',
+			'November',
+			'December'
+		];
 
-		const januaryIncomes = calculateMonthIncome(incomes.incomes, 'June');
-		console.log("JAN INCOMES TOTAL: " + januaryIncomes);
+		const monthIncomes = months.reduce(
+			(acc, month) => {
+				acc[month] = calculateMonthTotal(incomes.incomes, month);
+				return acc;
+			},
+			{} as Record<string, number>
+		);
+
+		const monthExpenses = months.reduce(
+			(acc, month) => {
+				acc[month] = calculateMonthTotal(expenses.expenses, month);
+				return acc;
+			},
+			{} as Record<string, number>
+		);
 
 		return {
 			props: {
-				expenses: expenses.expenses,
 				incomes: incomes.incomes,
+				expenses: expenses.expenses,
 				budgets: budgets.budgets,
-				januaryIncomes: januaryIncomes
+				monthIncomes: monthIncomes,
+				monthExpenses: monthExpenses
 			}
 		};
 	} catch (error) {
@@ -36,7 +63,9 @@ export async function load({ fetch }: LoadEvent) {
 			props: {
 				expenses: [],
 				incomes: [],
-				budgets: []
+				budgets: [],
+				monthIncomes: {},
+				monthExpenses: {}
 			}
 		};
 	}
