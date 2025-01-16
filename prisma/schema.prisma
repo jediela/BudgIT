@@ -28,7 +28,7 @@ model Income {
   id          Int     @id @default(autoincrement())
   name        String
   description String?
-  month       Month
+  date        DateTime
   amount      Decimal
   account     String?
 
@@ -41,7 +41,7 @@ model Expense {
   id          Int     @id @default(autoincrement())
   name        String
   description String?
-  month       Month
+  date        DateTime
   amount      Decimal
   card        String?
 
