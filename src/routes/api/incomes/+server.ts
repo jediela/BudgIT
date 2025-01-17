@@ -104,10 +104,11 @@ export async function POST({ request }: RequestEvent) {
 	}
 
 	try {
-		const { name, description, month, amount, account, type } = await request.json();
-		validateFields({ name, amount, type, month });
+		const { name, description, date, amount, account, type } = await request.json();
+		validateFields({ name, amount, type, date });
+		const formattedDate = new Date(`${date}T00:00:00.000Z`);
 		const newIncome = await prisma.income.create({
-			data: { name, description, month, amount, account, userId: user.id, type }
+			data: { name, description, date: formattedDate, amount, account, userId: user.id, type }
 		});
 
 		return json(newIncome, { status: 201 });

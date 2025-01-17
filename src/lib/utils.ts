@@ -58,8 +58,8 @@ export const flyAndScale = (
 /**
  * Calculates the total income/expense for the given month
  */
-export function calculateMonthTotal(catagory: any[], month: string): number {
-	const total = catagory
+export function calculateMonthTotal(category: any[], month: string): number {
+	const total = category
 		.filter((item) => item.month === month)
 		.reduce((total, item) => total + parseFloat(item.amount), 0);
 

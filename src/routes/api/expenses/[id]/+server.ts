@@ -3,6 +3,7 @@ import { findExpenseById } from '$lib/expenses/utils';
 import { validateId, checkAuthorization } from '$lib/api/utils';
 import { prisma } from '$lib/prisma';
 import { json, type RequestEvent } from '@sveltejs/kit';
+import { format } from 'path';
 
 // Update
 export async function PUT({ request, params }: RequestEvent) {
@@ -15,13 +16,13 @@ export async function PUT({ request, params }: RequestEvent) {
 	validateId(id);
 
 	try {
-		const { name, description, month, amount, card, type } = await request.json();
+		const { name, description, date, amount, card, type } = await request.json();
 		const expense = await findExpenseById(Number(id));
 		checkAuthorization(expense, user);
-
+		const formattedDate = new Date(`${date}T00:00:00.000Z`);
 		const updatedExpense = await prisma.expense.update({
 			where: { id: Number(id) },
-			data: { name, description, month, amount, card, userId: user.id, type }
+			data: { name, description, date: formattedDate, amount, card, userId: user.id, type }
 		});
 
 		return json(
