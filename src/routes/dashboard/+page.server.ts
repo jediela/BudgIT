@@ -32,8 +32,6 @@ export async function load({ fetch }: LoadEvent) {
 			'December'
 		];
 
-		
-
 		const monthIncomes = months.reduce(
 			(acc, month) => {
 				acc[month] = calculateMonthTotal(incomes.incomes, month);
