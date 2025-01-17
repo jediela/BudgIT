@@ -19,16 +19,16 @@ model User {
   fname    String
   lname    String
   password String
-  Income   Income[] @relation("UserIncome")
+  Income   Income[]  @relation("UserIncome")
   Expense  Expense[] @relation("UserExpense")
   Budget   Budget[]  @relation("UserBudget")
 }
 
 model Income {
-  id          Int     @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   name        String
   description String?
-  date        DateTime
+  date        DateTime @db.Date
   amount      Decimal
   account     String?
 
@@ -38,32 +38,31 @@ model Income {
 }
 
 model Expense {
-  id          Int     @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   name        String
   description String?
-  date        DateTime
+  date        DateTime @db.Date
   amount      Decimal
   card        String?
 
-  User   User          @relation("UserExpense", fields: [userId], references: [id], onDelete: Cascade)
+  User   User         @relation("UserExpense", fields: [userId], references: [id], onDelete: Cascade)
   userId Int
   type   ExpenseTypes
 
-  Budget   Budget?     @relation(fields: [budgetId], references: [id])
+  Budget   Budget? @relation(fields: [budgetId], references: [id])
   budgetId Int?
 }
 
 model Budget {
-  id            Int       @id @default(autoincrement())
-  userId        Int
-  limit         Decimal
-  currentSpending Expense[] @relation
-  type          ExpenseTypes
-  month         Month
+  id              Int          @id @default(autoincrement())
+  userId          Int
+  limit           Decimal
+  currentSpending Expense[]    @relation
+  type            ExpenseTypes
+  date            DateTime     @db.Date
 
-  User   User   @relation("UserBudget", fields: [userId], references: [id], onDelete: Cascade)
+  User User @relation("UserBudget", fields: [userId], references: [id], onDelete: Cascade)
 }
-
 
 enum IncomeTypes {
   Paycheck

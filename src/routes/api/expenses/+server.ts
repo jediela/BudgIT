@@ -105,10 +105,11 @@ export async function POST({ request }: RequestEvent) {
 	}
 
 	try {
-		const { name, description, month, amount, card, type } = await request.json();
-		validateFields({ name, amount, type, month });
+		const { name, description, date, amount, card, type } = await request.json();
+		validateFields({ name, amount, type, date });
+		const formattedDate = new Date(`${date}T00:00:00.000Z`);
 		const newExpense = await prisma.expense.create({
-			data: { name, description, month, amount, card, userId: user.id, type }
+			data: { name, description, date: formattedDate, amount, card, userId: user.id, type }
 		});
 
 		return json(newExpense, { status: 201 });

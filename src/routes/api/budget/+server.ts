@@ -86,11 +86,11 @@ export async function POST({ request }: RequestEvent) {
 	}
 
 	try {
-		const { limit, type, month } = await request.json();
-		validateFields({ limit, type, month });
-
+		const { limit, type, date } = await request.json();
+		validateFields({ limit, type, date });
+		const formattedDate = new Date(`${date}T00:00:00.000Z`);
 		const newBudget = await prisma.budget.create({
-			data: { userId: user.id, limit, type, month }
+			data: { userId: user.id, limit, type, date: formattedDate }
 		});
 
 		return json(newBudget, { status: 201 });

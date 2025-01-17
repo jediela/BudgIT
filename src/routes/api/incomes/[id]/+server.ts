@@ -15,13 +15,13 @@ export async function PUT({ request, params }: RequestEvent) {
 	validateId(id);
 
 	try {
-		const { name, description, amount, month, account, type } = await request.json();
+		const { name, description, amount, date, account, type } = await request.json();
 		const income = await findIncomeById(Number(id));
 		checkAuthorization(income, user);
-
+		const formattedDate = new Date(`${date}T00:00:00.000Z`);
 		const updatedIncome = await prisma.income.update({
 			where: { id: Number(id) },
-			data: { name, description, month, amount, account, userId: user.id, type }
+			data: { name, description, date: formattedDate, amount, account, userId: user.id, type }
 		});
 
 		return json(

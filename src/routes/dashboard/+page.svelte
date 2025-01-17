@@ -5,6 +5,10 @@
 	import Modal from '$lib/components/Modal.svelte';
 	import { toast } from 'svelte-sonner';
 	import BarChart from '$lib/components/graph/BarChart.svelte';
+	import { getLocalTimeZone, today } from '@internationalized/date';
+	import { Calendar } from '$lib/components/ui/calendar/index.js';
+
+	let value = $state(today(getLocalTimeZone()));
 
 	let { data } = $props();
 	let { expenses, incomes, budgets, monthIncomes, monthExpenses } = $state(
@@ -158,6 +162,8 @@
 		submittedIncome = false;
 	}
 </script>
+
+<Calendar bind:value class="rounded-md border shadow" />
 
 <h1>MONTHLY INCOME TOTALS</h1>
 <ul>
