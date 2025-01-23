@@ -9,7 +9,7 @@
 	import { Calendar } from '$lib/components/ui/calendar/index.js';
 
 	let value = $state(today(getLocalTimeZone()));
-
+	let x = 0;
 	let { data } = $props();
 	let { expenses, incomes, budgets, monthIncomes, monthExpenses } = $state(
 		data.props || {
@@ -29,7 +29,7 @@
 	let expenseForm = $state({
 		name: '',
 		description: '',
-		month: '',
+		date: '',
 		amount: '',
 		account: '',
 		type: ''
@@ -38,7 +38,7 @@
 	let incomeForm = $state({
 		name: '',
 		description: '',
-		month: '',
+		date: '',
 		amount: '',
 		account: '',
 		type: ''
@@ -52,7 +52,7 @@
 
 		let hasError = false;
 
-		if (!expenseForm.name || !expenseForm.month || !expenseForm.amount) {
+		if (!expenseForm.name || !expenseForm.date || !expenseForm.amount) {
 			hasError = true;
 			submittedExpense = true;
 			toast.error('Please fill in the required fields', { duration: 2000, position: 'top-center' });
@@ -76,14 +76,14 @@
 				expenseForm = {
 					name: '',
 					description: '',
-					month: '',
+					date: '',
 					amount: '',
 					account: '',
 					type: ''
 				};
 				submittedExpense = false;
-				monthExpenses[newExpense.month] =
-					(monthExpenses[newExpense.month] || 0) + parseFloat(newExpense.amount);
+				monthExpenses[newExpense.date] =
+					(monthExpenses[newExpense.date] || 0) + parseFloat(newExpense.amount);
 			} else {
 				console.error('Failed to add expense:', await response.json());
 			}
@@ -96,7 +96,7 @@
 		e.preventDefault();
 		let hasError = false;
 
-		if (!incomeForm.name || !incomeForm.month || !incomeForm.amount) {
+		if (!incomeForm.name || !incomeForm.date || !incomeForm.amount) {
 			hasError = true;
 			submittedIncome = true;
 			toast.error('Please fill in the required fields', { duration: 2000, position: 'top-center' });
@@ -120,14 +120,14 @@
 				incomeForm = {
 					name: '',
 					description: '',
-					month: '',
+					date: '',
 					amount: '',
 					account: '',
 					type: ''
 				};
 				submittedIncome = false;
-				monthIncomes[newIncome.month] =
-					(monthIncomes[newIncome.month] || 0) + parseFloat(newIncome.amount);
+				monthIncomes[newIncome.date] =
+					(monthIncomes[newIncome.date] || 0) + parseFloat(newIncome.amount);
 			} else {
 				console.error('Failed to add income:', await response.json());
 			}
@@ -141,7 +141,7 @@
 		expenseForm = {
 			name: '',
 			description: '',
-			month: '',
+			date: '',
 			amount: '',
 			account: '',
 			type: ''
@@ -154,7 +154,7 @@
 		incomeForm = {
 			name: '',
 			description: '',
-			month: '',
+			date: '',
 			amount: '',
 			account: '',
 			type: ''
@@ -243,4 +243,4 @@
 	{/if}
 </div>
 
-<BarChart />
+<BarChart monthData={monthIncomes} />

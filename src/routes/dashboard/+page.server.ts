@@ -17,7 +17,7 @@ export async function load({ fetch }: LoadEvent) {
 		const expenses = await expensesResponse.json();
 		const budgets = await budgetsResponse.json();
 
-		const months = [
+		const monthNames = [
 			'January',
 			'February',
 			'March',
@@ -32,9 +32,11 @@ export async function load({ fetch }: LoadEvent) {
 			'December'
 		];
 
+		const months = Array.from({ length: 12 }, (_, i) => i);
+
 		const monthIncomes = months.reduce(
 			(acc, month) => {
-				acc[month] = calculateMonthTotal(incomes.incomes, month);
+				acc[monthNames[month]] = calculateMonthTotal(incomes.incomes, month);
 				return acc;
 			},
 			{} as Record<string, number>
@@ -42,12 +44,13 @@ export async function load({ fetch }: LoadEvent) {
 
 		const monthExpenses = months.reduce(
 			(acc, month) => {
-				acc[month] = calculateMonthTotal(expenses.expenses, month);
+				acc[monthNames[month]] = calculateMonthTotal(expenses.expenses, month);
 				return acc;
 			},
 			{} as Record<string, number>
 		);
 
+		console.log('monthIncomes:', monthIncomes);
 		return {
 			props: {
 				incomes: incomes.incomes,
