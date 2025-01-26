@@ -1,0 +1,9 @@
+echo "Running pre-commit hook..."
+
+# Run prettier.sh
+echo "\n----- Running prettier check -----"
+scripts/./prettier.sh
+
+# Run lint.sh
+# echo "\n----- Running lint check -----"
+# scripts/./lint.sh

@@ -2,15 +2,23 @@
 	import { BarGraph, type BarGraphData } from './BarGraph';
 	import { browser } from '$app/environment';
 
-	const {
-		data = [
-			{ name: 'January', value: 88, color: '#ff6b6b' },
-			{ name: 'B', value: 42, color: '#4ecdc4' },
-			{ name: 'C', value: 58, color: '#45b7d1' },
-			{ name: 'D', value: 39, color: '#ff0' },
-			{ name: 'E', value: 77, color: '#ffeead' }
-		]
-	}: { data?: BarGraphData } = $props();
+	const { monthData }: { monthData: Record<string, number> } = $props();
+
+	// Assign data directly using monthData
+	const data: BarGraphData = [
+		{ name: 'January', value: monthData['January'] ?? 0, color: '#ff6b6b' },
+		{ name: 'February', value: monthData['February'] ?? 0, color: '#4ecdc4' },
+		{ name: 'March', value: monthData['March'] ?? 0, color: '#8e44ad' },
+		{ name: 'April', value: monthData['April'] ?? 0, color: '#3498db' },
+		{ name: 'May', value: monthData['May'] ?? 0, color: '#1abc9c' },
+		{ name: 'June', value: monthData['June'] ?? 0, color: '#f39c12' },
+		{ name: 'July', value: monthData['July'] ?? 0, color: '#e74c3c' },
+		{ name: 'August', value: monthData['August'] ?? 0, color: '#9b59b6' },
+		{ name: 'September', value: monthData['September'] ?? 0, color: '#34495e' },
+		{ name: 'October', value: monthData['October'] ?? 0, color: '#16a085' },
+		{ name: 'November', value: monthData['November'] ?? 0, color: '#27ae60' },
+		{ name: 'December', value: monthData['December'] ?? 0, color: '#2980b9' }
+	];
 
 	let displayData = $state(data);
 

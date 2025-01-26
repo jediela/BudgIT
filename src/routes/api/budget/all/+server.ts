@@ -1,7 +1,6 @@
 import { json, type RequestEvent } from '@sveltejs/kit';
 import { prisma } from '$lib/prisma';
 import { authenticate } from '$lib/auth/jwt.js';
-import { validateFields } from '$lib/api/utils';
 
 export async function GET({ request }: RequestEvent) {
 	const user = await authenticate(request);

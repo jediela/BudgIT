@@ -56,12 +56,14 @@ export const flyAndScale = (
 };
 
 /**
- * Calculates the total income/expense for the given month
+ * Calculates the total income/expense for the given month for the present year
  */
-export function calculateMonthTotal(category: any[], month: string): number {
-	const total = category
-		.filter((item) => item.month === month)
+export function calculateMonthTotal(category: any[], month: number): number {
+	return category
+		.filter(
+			(item) =>
+				new Date(item.date).getMonth() === month &&
+				new Date(item.date).getFullYear() === new Date().getFullYear()
+		)
 		.reduce((total, item) => total + parseFloat(item.amount), 0);
-
-	return total;
 }

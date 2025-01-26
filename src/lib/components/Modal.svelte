@@ -39,10 +39,11 @@
 				/>
 			</div>
 			<div>
-				<label for="month" class="mb-1 block font-medium">
-					Month <span class="text-red-500">*</span>
+				<label for="date" class="mb-1 block font-medium">
+					Date <span class="text-red-500">*</span>
 				</label>
-				<select
+				<input type="text" bind:value={formData.date} />
+				<!-- <select
 					id="month"
 					bind:value={formData.month}
 					required
@@ -62,7 +63,7 @@
 					<option value="October">October</option>
 					<option value="November">November</option>
 					<option value="December">December</option>
-				</select>
+				</select> -->
 			</div>
 			<div>
 				<label for="amount" class="mb-1 block font-medium">
