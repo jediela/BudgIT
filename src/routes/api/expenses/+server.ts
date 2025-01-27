@@ -70,7 +70,12 @@ export async function GET({ request }: RequestEvent) {
 					status: 'success',
 					message: 'No expenses match the criteria',
 					expenses: [],
-					meta: { total: totalExpenses, page: pageNumber, limit: limitNumber, totalPages }
+					meta: {
+						total: totalExpenses,
+						page: pageNumber,
+						limit: limitNumber,
+						totalPages: Math.ceil(totalExpenses / limitNumber)
+					}
 				},
 				{ status: 200 }
 			);
