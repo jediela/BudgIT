@@ -10,7 +10,7 @@ export async function GET({ request }: RequestEvent) {
 	try {
 		const url = new URL(request.url);
 		const queryParams = Object.fromEntries(url.searchParams.entries());
-		const { name, description, month, card, type, sortBy, order = 'asc' } = queryParams;
+		const { name, description, date, card, type, sortBy, order = 'asc' } = queryParams;
 
 		const filters: any = { userId: user.id };
 		if (name) {
@@ -19,8 +19,8 @@ export async function GET({ request }: RequestEvent) {
 		if (description) {
 			filters.description = { contains: description, mode: 'insensitive' };
 		}
-		if (month) {
-			filters.month = month;
+		if (date) {
+			filters.date = date;
 		}
 		if (card) {
 			filters.card = card;
@@ -29,7 +29,7 @@ export async function GET({ request }: RequestEvent) {
 			filters.type = type;
 		}
 
-		const validSortFields = ['name', 'month', 'amount'];
+		const validSortFields = ['name', 'date', 'amount'];
 		if (sortBy && !validSortFields.includes(sortBy)) {
 			return json({ status: 'error', message: `Invalid sortBy field: ${sortBy}` }, { status: 400 });
 		}

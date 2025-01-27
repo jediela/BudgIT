@@ -14,7 +14,7 @@ export async function GET({ request }: RequestEvent) {
 		const {
 			name,
 			description,
-			month,
+			date,
 			account,
 			type,
 			page = '1',
@@ -37,8 +37,8 @@ export async function GET({ request }: RequestEvent) {
 		if (description) {
 			filters.description = { contains: description, mode: 'insensitive' };
 		}
-		if (month) {
-			filters.month = month;
+		if (date) {
+			filters.date = new Date(date);
 		}
 		if (account) {
 			filters.account = account;
@@ -47,7 +47,7 @@ export async function GET({ request }: RequestEvent) {
 			filters.type = type;
 		}
 
-		const validSortFields = ['name', 'month', 'amount'];
+		const validSortFields = ['name', 'date', 'amount'];
 		if (sortBy && !validSortFields.includes(sortBy)) {
 			return json({ status: 'error', message: `Invalid sortBy field: ${sortBy}` }, { status: 400 });
 		}

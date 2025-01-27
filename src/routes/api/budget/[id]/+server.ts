@@ -48,7 +48,7 @@ export async function PUT({ request, params }: RequestEvent) {
 	validateId(id);
 
 	try {
-		const { limit, type, month } = await request.json();
+		const { limit, type, date } = await request.json();
 
 		const budget = await prisma.budget.findUnique({ where: { id: Number(id) } });
 
@@ -59,9 +59,10 @@ export async function PUT({ request, params }: RequestEvent) {
 			);
 		}
 
+		const formattedDate = new Date(`${date}T00:00:00.000Z`);
 		const updatedBudget = await prisma.budget.update({
 			where: { id: Number(id) },
-			data: { limit, type, month }
+			data: { limit, type, date: formattedDate }
 		});
 
 		return json(

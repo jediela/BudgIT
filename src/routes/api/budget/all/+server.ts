@@ -11,17 +11,17 @@ export async function GET({ request }: RequestEvent) {
 	try {
 		const url = new URL(request.url);
 		const queryParams = Object.fromEntries(url.searchParams.entries());
-		const { month, type, sortBy, order = 'asc' } = queryParams;
+		const { date, type, sortBy, order = 'asc' } = queryParams;
 
 		const filters: any = { userId: user.id };
-		if (month) {
-			filters.month = month;
+		if (date) {
+			filters.date = date;
 		}
 		if (type) {
 			filters.type = type;
 		}
 
-		const validSortFields = ['limit', 'month'];
+		const validSortFields = ['limit', 'date'];
 		if (sortBy && !validSortFields.includes(sortBy)) {
 			return json({ status: 'error', message: `Invalid sortBy field: ${sortBy}` }, { status: 400 });
 		}

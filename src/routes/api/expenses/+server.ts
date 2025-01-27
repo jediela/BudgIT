@@ -5,16 +5,18 @@ import { validateFields } from '$lib/api/utils';
 
 export async function GET({ request }: RequestEvent) {
 	const user = await authenticate(request);
+
 	if (user instanceof Response) {
 		return user;
 	}
+
 	try {
 		const url = new URL(request.url);
 		const queryParams = Object.fromEntries(url.searchParams.entries());
 		const {
 			name,
 			description,
-			month,
+			date,
 			card,
 			type,
 			page = '1',
@@ -37,8 +39,12 @@ export async function GET({ request }: RequestEvent) {
 		if (description) {
 			filters.description = { contains: description, mode: 'insensitive' };
 		}
-		if (month) {
-			filters.month = month;
+		if (date) {
+			const formattedDate = new Date(date);
+			if (isNaN(formattedDate.getTime())) {
+				return json({ status: 'error', message: 'Invalid date format' }, { status: 400 });
+			}
+			filters.date = formattedDate;
 		}
 		if (card) {
 			filters.card = card;
@@ -47,7 +53,7 @@ export async function GET({ request }: RequestEvent) {
 			filters.type = type;
 		}
 
-		const validSortFields = ['name', 'month', 'amount'];
+		const validSortFields = ['name', 'date', 'amount'];
 		if (sortBy && !validSortFields.includes(sortBy)) {
 			return json({ status: 'error', message: `Invalid sortBy field: ${sortBy}` }, { status: 400 });
 		}
@@ -64,7 +70,7 @@ export async function GET({ request }: RequestEvent) {
 					status: 'success',
 					message: 'No expenses match the criteria',
 					expenses: [],
-					meta: { total: totalExpenses, page, limit, totalPages }
+					meta: { total: totalExpenses, page: pageNumber, limit: limitNumber, totalPages }
 				},
 				{ status: 200 }
 			);
@@ -82,12 +88,7 @@ export async function GET({ request }: RequestEvent) {
 				status: 'success',
 				message: 'Expenses found',
 				expenses,
-				meta: {
-					total: totalExpenses,
-					page: pageNumber,
-					limit: limitNumber,
-					totalPages: Math.ceil(totalExpenses / limitNumber)
-				}
+				meta: { total: totalExpenses, page: pageNumber, limit: limitNumber, totalPages }
 			},
 			{ status: 200 }
 		);
@@ -99,14 +100,15 @@ export async function GET({ request }: RequestEvent) {
 export async function POST({ request }: RequestEvent) {
 	const user = await authenticate(request);
 
-	// user will return a response if error occurs
 	if (user instanceof Response) {
 		return user;
 	}
 
 	try {
 		const { name, description, date, amount, card, type } = await request.json();
+
 		validateFields({ name, amount, type, date });
+
 		const formattedDate = new Date(`${date}T00:00:00.000Z`);
 		const newExpense = await prisma.expense.create({
 			data: { name, description, date: formattedDate, amount, card, userId: user.id, type }
