@@ -93,7 +93,12 @@ export async function GET({ request }: RequestEvent) {
 				status: 'success',
 				message: 'Expenses found',
 				expenses,
-				meta: { total: totalExpenses, page: pageNumber, limit: limitNumber, totalPages }
+				meta: {
+					total: totalExpenses,
+					page: pageNumber,
+					limit: limitNumber,
+					totalPages: Math.ceil(totalExpenses / limitNumber)
+				}
 			},
 			{ status: 200 }
 		);
